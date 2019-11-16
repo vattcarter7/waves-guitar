@@ -56,7 +56,7 @@ app.get('/api/product/articles', (req, res) => {
 
 
 
-// ***  We make the following convention :: /api/product/article?id=lkdsflksjfl,lksdlfkjasdf,kllsdflkjdflk&type=single
+//  We make the following convention :: /api/product/article?id=lkdsflksjfl,lksdlfkjasdf,kllsdflkjdflk&type=single
 app.get("/api/product/articles_by_id", (req, res) => {
   let type = req.query.type;
   let items = req.query.id;
