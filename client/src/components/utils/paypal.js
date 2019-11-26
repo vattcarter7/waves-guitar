@@ -42,7 +42,7 @@ class Paypal extends Component {
         let total = this.props.toPay;
 
         const client = {
-            sandbox:'AfbA2-qjz92KhC5IDxvx2UpiIDBmSD7PdlKkZk1-OndNwg7Wc5wVAJKlPWQJcHwioMFz0kn4zOXnbqGW',
+            sandbox:'AeJgWWheAnEX7Cqapstn1GZUTRv2KtNSeyc5cRshA9w0LwO--KhsD7rSCk_rsP2ewbTz4Ozwmfk-bn0L',
             production:''
         }
         

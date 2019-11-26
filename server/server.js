@@ -1,5 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const cors = require('cors');
 const cookieParser = require('cookie-parser'); 
 const formidable = require('express-formidable');
 const cloudinary = require('cloudinary');
@@ -12,7 +13,9 @@ const path = require('path');
 const app = express();
 const mongoose = require('mongoose');
 const async = require('async');
+
 require('dotenv').config();
+const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 
 
 mongoose.Promise = global.Promise;
@@ -23,11 +26,14 @@ mongoose.connect(process.env.MONGODB_URI, {
 mongoose.set("useCreateIndex", true);
 mongoose.set('useFindAndModify', false);
 
+app.use(cors());
+
 app.use(bodyParser.urlencoded({extended:true}));
 app.use(bodyParser.json());
 app.use(cookieParser());
 
 app.use(express.static('client/build'))
+
 
 cloudinary.config({
     cloud_name: process.env.CLOUD_NAME,
@@ -263,7 +269,6 @@ app.post('/api/users/reset_user',(req,res)=>{
     )
 })
 
-
 app.post('/api/users/reset_password',(req,res)=>{
 
     var today = moment().startOf('day').valueOf();
@@ -288,7 +293,6 @@ app.post('/api/users/reset_password',(req,res)=>{
         })
     })
 })
-
 
 app.get('/api/users/auth',auth,(req,res)=>{
         res.status(200).json({
@@ -553,11 +557,30 @@ app.post('/api/site/site_data',auth,admin,(req,res)=>{
     )
 })
 
+
+app.post('/api/payment', (req, res) => {
+   // const token = req.body.stripeToken || "tok_amex";
+    const body = {
+        source: req.body.token.id,
+        amount: req.body.amount,
+        currency: 'usd'
+    };
+  
+    stripe.charges.create(body, (stripeErr, stripeResponse) => {
+        console.log(req.body)
+      if (stripeErr) {
+        res.status(500).send({ error: stripeErr });
+      } else {
+        res.status(200).send({ success: stripeResponse });
+      }
+    });
+  });
+
 // DEFAULT 
 if( process.env.NODE_ENV === 'production' ){
     const path = require('path');
     app.get('/*',(req,res)=>{
-        res.sendfile(path.resolve(__dirname,'../client','build','index.html'))
+        res.sendFile(path.resolve(__dirname,'../client','build','index.html'))
     })
 }
 
