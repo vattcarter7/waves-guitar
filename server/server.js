@@ -558,23 +558,23 @@ app.post('/api/site/site_data',auth,admin,(req,res)=>{
 })
 
 
-app.post('/api/payment', (req, res) => {
-   // const token = req.body.stripeToken || "tok_amex";
-    const body = {
-        source: req.body.token.id,
-        amount: req.body.amount,
-        currency: 'usd'
-    };
-  
-    stripe.charges.create(body, (stripeErr, stripeResponse) => {
-        console.log(req.body)
-      if (stripeErr) {
-        res.status(500).send({ error: stripeErr });
-      } else {
-        res.status(200).send({ success: stripeResponse });
-      }
-    });
+app.post("/api/payment", (req, res) => {
+  // const token = req.body.stripeToken || "tok_amex";
+  const body = {
+    source: req.body.token.id,
+    amount: req.body.amount,
+    currency: "usd"
+  };
+
+  stripe.charges.create(body, (stripeErr, stripeResponse) => {
+    console.log(req.body);
+    if (stripeErr) {
+      res.status(500).send({ error: stripeErr });
+    } else {
+      res.status(200).send({ success: stripeResponse });
+    }
   });
+});
 
 // DEFAULT 
 if( process.env.NODE_ENV === 'production' ){

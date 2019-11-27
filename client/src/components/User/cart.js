@@ -139,7 +139,7 @@ class UserCart extends Component {
                 transactionCanceled={data => this.transactionCanceled(data)}
                 onSuccess={data => this.transactionSuccess(data)}
               />
-              <CheckoutPage />
+              <CheckoutPage total={this.state.total} />
             </div>
           ) : null}
         </div>
